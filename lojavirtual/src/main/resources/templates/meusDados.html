@@ -23,7 +23,9 @@
 	        <span th:insert="pages/mensagem"></span>
             <div class="checkout__form">
                 <h4>Suas informações</h4>
-                <form th:action="@{cadastrarUsuario}" th:method="put" th:object="${usu}">
+                <form th:action="@{alterarUsuario}" th:method="put" th:object="${usu}">
+                <input type="hidden" id="idUsuario" name="idUsuario" th:value="*{idUsuario}">
+                
                     <div class="row">
                         <div class="col-lg-12 col-md-6">
                             <div class="row">
@@ -32,7 +34,7 @@
 	                            <div class="col-lg-4">
                                     <div class="checkout__input">
                                     <p>Tipo de Pessoa<span>*</span></p>
-                                        <select class="form-control" id="tipoPessoa" name="tipoPessoa" style="size: 1000px;">
+                                        <select class="form-control" id="tipoPessoa" name="tipoPessoa" style="size: 1000px;" th:field="*{tipoPessoa}">
 									  <option value="F">Física</option>
 									  <option value="J">Jurídica</option>
 									</select>
@@ -42,35 +44,35 @@
                                 <div class="col-lg-8">
                                     <div class="checkout__input">
                                         <p>Nome<span>*</span></p>
-                                        <input type="text" id="nome" name="nome">
+                                        <input type="text" id="nome" name="nome" th:value="*{nome}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Documento<span>*</span></p>
-                                        <input type="text" id="documento" name="documento">
+                                        <input type="text" id="documento" name="documento" th:value="*{documento}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>CPF<span>*</span></p>
-                                        <input type="number" id="cpf" name="cpf">
+                                        <input type="number" id="cpf" name="cpf" th:value="*{cpf}">
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Endereço<span>*</span></p>
-                                <input type="text" id="endereco" name="endereco" placeholder="Endereço completo">
+                                <input type="text" id="endereco" name="endereco" placeholder="Endereço completo" th:value="*{endereco}">
                             </div>
                             
                             <div class="row">
 	                            <div class="checkout__input col-md-8">
 	                                <p>Cidade<span>*</span></p>
-	                                <input type="text" id="cidade" name="cidade" class="checkout__input__add">
+	                                <input type="text" id="cidade" name="cidade" class="checkout__input__add" th:value="*{cidade}">
 	                            </div>
 	                            <div class="checkout__input col-md-4">
 	                                <p>UF<span>*</span></p>
-	                                <select class="form-control" id="estado" name="estado" >
+	                                <select class="form-control" id="estado" name="estado" th:field="*{estado}">
 								    	<option value='DF'>Distrito Federal</option>
 									  	<option value='AC'>Acre</option>
 										<option value='AL'>Alagoas</option>
@@ -102,11 +104,11 @@
 	                            </div>
 	                            <div class="checkout__input col-md-4">
 	                                <p>CEP<span>*</span></p>
-	                                <input type="text" id="cep" name="cep">
+	                                <input type="text" id="cep" name="cep" th:value="*{cep}">
 	                            </div>
 	                            <div class="checkout__input col-md-4">
 	                                <p>Sexo<span>*</span></p>
-	                                <select class="form-control" id="sexo" name="sexo">
+	                                <select class="form-control" id="sexo" name="sexo" th:field="*{sexo}">
 									  <option value="M">Masculino</option>
 									  <option value="F">Feminino</option>
 									</select>
@@ -116,24 +118,24 @@
                                 <div class="col-lg-4">
                                     <div class="checkout__input">
                                         <p>Telefone<span>*</span></p>
-                                        <input type="text" id="telefone" name="telefone">
+                                        <input type="text" id="telefone" name="telefone" th:value="*{telefone}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>E-mail<span>*</span></p>
-                                        <input type="text" id="email" name="email">
+                                        <input type="text" id="email" name="email" th:value="*{email}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Crie uma senha<span>*</span></p>
-                                        <input type="password" id="senha" name="senha">
+                                        <input type="password" id="senha" name="senha" th:value="*{senha}">
                                     </div>
                                 </div>
                             </div>
                             
-                            <center><button type="submit" class="site-btn">Salvar Informações</button></center>
+                            <center><button type="submit" class="site-btn">Alterar Informações</button></center>
 
                         </div>
 

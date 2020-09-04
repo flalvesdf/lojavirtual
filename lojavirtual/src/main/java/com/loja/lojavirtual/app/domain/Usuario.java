@@ -58,6 +58,17 @@ public class Usuario {
 	@Column(name="tipopessoa", nullable = false)
 	private String tipoPessoa; // F = Física  / J = Jurídica
 	
+	@Column(name="adminloja", nullable = false)
+	private String adminLoja;
+	
+	public String getAdminLoja() {
+		return adminLoja;
+	}
+
+	public void setAdminLoja(String adminLoja) {
+		this.adminLoja = adminLoja;
+	}
+
 	public String getCidade() {
 		return cidade;
 	}

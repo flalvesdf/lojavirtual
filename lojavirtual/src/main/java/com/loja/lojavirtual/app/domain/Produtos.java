@@ -48,6 +48,17 @@ public class Produtos {
 	@Column(name="produtodestaque", nullable = false)
 	private String produtoDestaque;
 	
+	@Column(name="categoria", nullable = false)
+	private String categoria;
+	
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
 	public String getProdutoDestaque() {
 		return produtoDestaque;
 	}

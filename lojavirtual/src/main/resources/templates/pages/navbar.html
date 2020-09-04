@@ -56,7 +56,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> minhaloja@minhaloja.com.br</li>
+                                <li ><i class="fa fa-user"></i> <a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#000;!important" ><i class="fa fa-user"></i> Entrar</a></li>
                                 <li></li>
                             </ul>
                         </div>
@@ -66,12 +66,11 @@
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
-<!--                                 <a href="#"><i class="fa fa-linkedin"></i></a> -->
-<!--                                 <a href="#"><i class="fa fa-pinterest-p"></i></a> -->
+								
                             </div>
 
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Entrar</a>
+                                <a th:if="${linkSair !=null}" th:href=${linkSair}><i class="fa fa-times"></i> Sair</a>
                             </div>
                         </div>
                     </div>

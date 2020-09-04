@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<span th:insert="pages/head"></span>
+</head>
+
+<body>
+<span th:insert="pages/navbar">  </span>
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+					<span th:insert="pages/menu"></span>
+                </div>
+                <div class="col-lg-9">
+                	<span th:insert="pages/pesquisar"></span>
+                	
+                	      <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                 <h6><span class="icon_tag_alt"></span> Não tem cadastro? <a href="cadastro">Clique aqui e faça agora!</a>
+                 </h6>
+             </div>
+         </div>
+        <span th:insert="pages/mensagem"></span>
+	        
+            <div class="checkout__form">
+                <h4>Suas informações</h4>
+                <form th:action="@{verificaLogin}" th:method="post" th:object="${usu}">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6">
+                            
+                            
+                            
+                            <div class="row">
+	                           
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Seu e-mail<span>*</span></p>
+                                        <input type="text" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Sua senha<span>*</span></p>
+                                        <input type="password" id="senha" name="senha">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <center><button type="submit" class="site-btn">Entrar</button></center>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+<!--     Footer Section Begin -->
+<span th:insert="pages/footer">  </span>
+<!--     Footer Section End -->
+
+<!-- Js Plugins -->
+<span th:insert="pages/scriptsjs">  </span>
+\</body>
+
+</html>

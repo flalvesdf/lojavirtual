@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<span th:insert="pages/head"></span>
+</head>
+
+<body>
+<span th:insert="pages/navbar">  </span>
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+					<span th:insert="pages/menu"></span>
+                </div>
+                <div class="col-lg-9">
+                	<span th:insert="pages/pesquisar"></span>
+                	
+                	      <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+	        <span th:insert="pages/mensagem"></span>
+            <div class="checkout__form">
+                <h4>Informações do Produto</h4>
+                <form th:action="@{cadastrarProduto}" th:method="put" th:object="${produto}">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6">
+                            <div class="row">
+                            	<div class="col-lg-8">
+                                    <div class="checkout__input">
+                                        <p>Nome do produto<span>*</span></p>
+                                        <input type="text" id="nome" name="nome">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                    <div class="checkout__input">
+                                    <p>Categoria do produto<span>*</span></p>
+                                        <select class="form-control" id="categoria" name="categoria" >
+								    	<option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:utext="${categoria.nome}"/>
+									</select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-12">
+                                    <div class="checkout__input">
+                                        <p>Fabricante<span>*</span></p>
+                                        <input type="text" id="fabricante" name="fabricante">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-12">
+                                    <div class="checkout__input">
+                                        <p>Descrição<span>*</span></p>
+                                        <input type="text" id="descricao" name="descricao">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>URL da Imagem<span>*</span></p>
+                                <input type="text" id="urlImagem" name="urlImagem" placeholder="URL da Imagem">
+                            </div>
+                            
+                            <div class="row">
+<!-- 	                            <div class="checkout__input col-md-8"> -->
+<!-- 	                                <p>Cidade<span>*</span></p> -->
+<!-- 	                                <input type="number" id="quantidade" name="quantidade" class="checkout__input__add"> -->
+<!-- 	                            </div> -->
+	                            <div class="checkout__input col-md-6">
+	                                <p>Produto ativo?<span>*</span></p>
+	                                <select class="form-control" id="ativo" name="ativo" >
+								    	<option value='S'>Sim</option>
+									  	<option value='N'>Não</option>
+									</select>
+	                            </div>
+	                            
+	                            <div class="checkout__input col-md-6">
+	                                <p>Produto destaque?<span>*</span></p>
+	                                <select class="form-control" id="produtoDestaque" name="produtoDestaque" >
+								    	<option value='S'>Sim</option>
+									  	<option value='N'>Não</option>
+									</select>
+	                            </div>
+	                            <div class="checkout__input col-md-6">
+	                                <p>Preço de compra<span>*</span></p>
+	                                <input type="number" step="0.01" id="precoCompra" name="precoCompra">
+	                            </div>
+	                            
+	                            <div class="checkout__input col-md-6">
+	                                <p>Preço de venda<span>*</span></p>
+	                                <input type="number" step="0.01" id="precoVenda" name="precoVenda">
+	                            </div>
+	                            
+	                            <div class="checkout__input col-md-6">
+	                                <p>Quantidade<span>*</span></p>
+	                                <input type="number" id="quantidade" name="quantidade">
+	                            </div>
+	                            
+                            <center><button type="submit" class="site-btn">Salvar Informações</button></center>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+<!--     Footer Section Begin -->
+<span th:insert="pages/footer">  </span>
+<!--     Footer Section End -->
+
+<!-- Js Plugins -->
+<span th:insert="pages/scriptsjs">  </span>
+\</body>
+
+</html>

@@ -28,6 +28,10 @@ public class UsuarioDao {
 	public Usuario recuperarPorId(Integer id) {
 		return em.createQuery("select a from Usuario a where a.idUsuario = :idUsuario", Usuario.class).setParameter("idUsuario", id).getSingleResult();
 	}
+	
+	public Usuario recuperarPorEmail(String email) {
+		return em.createQuery("select a from Usuario a where a.email = :email", Usuario.class).setParameter("email", email).getSingleResult();
+	}
 
 	public void atualizar(Usuario usu) {
 		em.merge(usu);
