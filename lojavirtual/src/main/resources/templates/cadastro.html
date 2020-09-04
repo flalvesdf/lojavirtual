@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<span th:insert="pages/head"></span>
+</head>
+
+<body>
+<span th:insert="pages/navbar">  </span>
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+					<span th:insert="pages/menu"></span>
+                </div>
+                <div class="col-lg-9">
+                	<span th:insert="pages/pesquisar"></span>
+                	
+                	      <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+<!--             <div class="row"> -->
+<!--                 <div class="col-lg-12"> -->
+<!--                     <h6><span class="icon_tag_alt"></span> Cadastre-se agora! Rápido e fácil! -->
+<!--                     </h6> -->
+<!--                 </div> -->
+<!--             </div> -->
+            <div class="checkout__form">
+                <h4>Suas informações</h4>
+                <form th:action="@{cadastrarUsuario}" th:method="put" th:object="${usu}">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-6">
+                            <div class="row">
+                            
+                            
+	                            <div class="col-lg-4">
+                                    <div class="checkout__input">
+                                    <p>Tipo de Pessoa<span>*</span></p>
+                                        <select class="form-control" id="tipoPessoa" name="tipoPessoa" style="size: 1000px;">
+									  <option value="F">Física</option>
+									  <option value="J">Jurídica</option>
+									</select>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-lg-8">
+                                    <div class="checkout__input">
+                                        <p>Nome<span>*</span></p>
+                                        <input type="text" id="nome" name="nome">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Documento<span>*</span></p>
+                                        <input type="text" id="documento" name="documento">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>CPF<span>*</span></p>
+                                        <input type="number" id="cpf" name="cpf">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Endereço<span>*</span></p>
+                                <input type="text" id="endereco" name="endereco" placeholder="Endereço completo">
+                            </div>
+                            
+                            <div class="row">
+	                            <div class="checkout__input col-md-8">
+	                                <p>Cidade<span>*</span></p>
+	                                <input type="text" id="cidade" name="cidade" class="checkout__input__add">
+	                            </div>
+	                            <div class="checkout__input col-md-4">
+	                                <p>UF<span>*</span></p>
+	                                <select class="form-control" id="estado" name="estado" >
+								    	<option value='DF'>Distrito Federal</option>
+									  	<option value='AC'>Acre</option>
+										<option value='AL'>Alagoas</option>
+										<option value='AP'>Amapá</option>
+										<option value='AM'>Amazonas</option>
+										<option value='BA'>Bahia</option>
+										<option value='CE'>Ceará</option>
+										<option value='ES'>Espírito Santo</option>
+										<option value='GO'>Goiás</option>
+										<option value='MA'>Maranhão</option>
+										<option value='MT'>Mato Grosso</option>
+										<option value='MS'>Mato Grosso do Sul</option>
+										<option value='MG'>Minas Gerais</option>
+										<option value='PA'>Pará</option>
+										<option value='PB'>Paraíba</option>
+										<option value='PR'>Paraná</option>
+										<option value='PE'>Pernambuco</option>
+										<option value='PI'>Piauí</option>
+										<option value='RJ'>Rio de Janeiro</option>
+										<option value='RN'>Rio Grande do Norte</option>
+										<option value='RS'>Rio Grande do Sul</option>
+										<option value='RO'>Rondônia</option>
+										<option value='RR'>Roraima</option>
+										<option value='SC'>Santa Catarina</option>
+										<option value='SP'>São Paulo</option>
+										<option value='SE'>Sergipe</option>
+										<option value='TO'>Tocantins</option>
+									</select>
+	                            </div>
+	                            <div class="checkout__input col-md-4">
+	                                <p>CEP<span>*</span></p>
+	                                <input type="text" id="cep" name="cep">
+	                            </div>
+	                            <div class="checkout__input col-md-4">
+	                                <p>Sexo<span>*</span></p>
+	                                <select class="form-control" id="sexo" name="sexo">
+									  <option value="M">Masculino</option>
+									  <option value="F">Feminino</option>
+									</select>
+	                            </div>
+<!--                             </div> -->
+<!--                             <div class="row"> -->
+                                <div class="col-lg-4">
+                                    <div class="checkout__input">
+                                        <p>Telefone<span>*</span></p>
+                                        <input type="text" id="telefone" name="telefone">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>E-mail<span>*</span></p>
+                                        <input type="text" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Crie uma senha<span>*</span></p>
+                                        <input type="password" id="senha" name="senha">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <center><button type="submit" class="site-btn">Salvar Informações</button></center>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+<!--     Footer Section Begin -->
+<span th:insert="pages/footer">  </span>
+<!--     Footer Section End -->
+
+<!-- Js Plugins -->
+<span th:insert="pages/scriptsjs">  </span>
+\</body>
+
+</html>

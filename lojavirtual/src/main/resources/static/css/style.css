@@ -611,7 +611,7 @@ ol {
 }
 
 .hero__search__form {
-	width: 610px;
+	width: 850px;
 	height: 50px;
 	border: 1px solid #ebebeb;
 	position: relative;
@@ -783,7 +783,7 @@ ol {
 -----------------------*/
 
 .featured {
-	padding-top: 80px;
+	padding-top: 0px;
 	padding-bottom: 40px;
 }
 
@@ -2041,7 +2041,7 @@ ol {
 -----------------------*/
 
 .checkout {
-	padding-top: 80px;
+	padding-top: 0px;
 	padding-bottom: 60px;
 }
 
