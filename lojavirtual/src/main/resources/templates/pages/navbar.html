@@ -11,10 +11,10 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>10</span></a></li>
+                <li><a href="#"><i class="fa fa-heart"></i> <span th:text="${wl}">0</span></a></li>
                 <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>30</span></a></li>
             </ul>
-            <div class="header__cart__price">item: <span>R$ 150.00</span></div>
+            <div class="header__cart__price">item: <span>R$ 0.00</span></div>
         </div>
 
         <nav class="humberger__menu__nav mobile-menu">
@@ -95,7 +95,7 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                            <li><a th:href=${linkWishlist}><i class="fa fa-heart"></i> <span th:text="${wl}">0</span></a></li>
                             <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
                         </ul>
                         <div class="header__cart__price"><span>R$ 0.00</span></div>
