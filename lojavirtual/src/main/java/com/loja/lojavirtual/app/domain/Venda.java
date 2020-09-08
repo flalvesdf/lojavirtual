@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="venda")
+@Table(name="vendas")
 public class Venda {
 	
 	@EmbeddedId
