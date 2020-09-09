@@ -67,6 +67,10 @@ public class LojaVirtualController {
 	public ModelAndView home(ModelMap model, HttpSession session) {
 		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Página Inicial", TipoLog.HOME, getIp(), "Home");	
 		model = informacoesBasicasPagina(model, session, log);
+		List<Produtos> produtos = prdDao.recuperarProdutosDestaque();
+		Categoria categoria = catDao.recuperarPorId(Integer.parseInt(produtos.get(0).getCategoria()));
+		produtos.get(0).setCategoriaProduto(categoria);
+		model.addAttribute("destaque", ConstrutorExibicaoProduto.exibeProdutoDestaque(produtos.get(0)));
 		return new ModelAndView("index", model);
 	}
 	
@@ -74,6 +78,10 @@ public class LojaVirtualController {
 	public ModelAndView home2(ModelMap model, HttpSession session) {
 		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Página Inicial", TipoLog.HOME, getIp(), "Home");	
 		model = informacoesBasicasPagina(model, session, log);
+		List<Produtos> produtos = prdDao.recuperarProdutosDestaque();
+		Categoria categoria = catDao.recuperarPorId(Integer.parseInt(produtos.get(0).getCategoria()));
+		produtos.get(0).setCategoriaProduto(categoria);
+		model.addAttribute("destaque", ConstrutorExibicaoProduto.exibeProdutoDestaque(produtos.get(0)));
 		return new ModelAndView("index", model);
 	}
 	
@@ -98,7 +106,8 @@ public class LojaVirtualController {
 				novoCarrinhoUsuario.add(venda);
 			}
 			
-			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario);
+			Usuario usuComprador = usuDao.recuperarPorId(uSessao.getIdUsuario());
+			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario, usuComprador);
 			model.addAttribute("carrinho", produtosCarrinho);
 			return new ModelAndView("carrinho", model);
 		}
@@ -125,7 +134,9 @@ public class LojaVirtualController {
 			wlNova.add(wish);
 		}
 		
-		String construtorExibicao = ConstrutorExibicaoProduto.exibirWishList(wlNova);
+		Usuario comprador = usuDao.recuperarPorId(usuSessao.getIdUsuario());
+		String construtorExibicao = ConstrutorExibicaoProduto.exibirWishList(wlNova, comprador);
+		
 		model.addAttribute("wishlist", construtorExibicao);
 		model = informacoesBasicasPagina(model, session, log);
 		return new ModelAndView("wish-list", model);
@@ -157,15 +168,11 @@ public class LojaVirtualController {
 				novoCarrinhoUsuario.add(venda);
 			}
 			
-			String produtosCarrinho = ConstrutorExibicaoProduto.checkout(novoCarrinhoUsuario);
+			Usuario comprador = usuDao.recuperarPorId(uSessao.getIdUsuario());
+			String produtosCarrinho = ConstrutorExibicaoProduto.checkout(novoCarrinhoUsuario, comprador);
 			model.addAttribute("carrinho", produtosCarrinho);
 			return new ModelAndView("checkout", model);
 		}
-		
-		
-		
-		
-		
 	}
 	
 	@RequestMapping(value = "/contato", method = RequestMethod.GET) 
@@ -189,9 +196,53 @@ public class LojaVirtualController {
 	
 	@RequestMapping(value = "/cadastroProduto", method = RequestMethod.GET) 
 	public ModelAndView cadastroProduto(ModelMap model, HttpSession session) { 
-		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: cadastroProduto", TipoLog.SECAO, getIp(), "cadastroProduto");
-		model = informacoesBasicasPagina(model, session, log);
-		return new ModelAndView("cadastroProduto", model);
+		
+		Usuario usuSessao = recuperarDaSessao(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
+				model = informacoesBasicasPagina(model, session, log);
+				return new ModelAndView("cadastroProduto", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+				model = informacoesBasicasPagina(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("index", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("login", model);
+		}
+	}
+	
+
+	
+	@RequestMapping(value = "/admin/listarProdutos", method = RequestMethod.GET) 
+	public ModelAndView listarProdutos(ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessao(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
+				model = informacoesBasicasPagina(model, session, log);
+				model.addAttribute("produtos", prdDao.recuperarTodos());
+				return new ModelAndView("listaProdutos", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+				model = informacoesBasicasPagina(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("index", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("login", model);
+		}
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET) 
@@ -375,7 +426,8 @@ public class LojaVirtualController {
 				novoCarrinhoUsuario.add(venda);
 			}
 			
-			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario);
+			Usuario usuComprador = usuDao.recuperarPorId(usuSessao.getIdUsuario());
+			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario, usuComprador);
 			model.addAttribute("carrinho", produtosCarrinho);
 			return new ModelAndView("carrinho", model);
 		}
@@ -438,7 +490,6 @@ public class LojaVirtualController {
 	
 	@PutMapping("/alterarProduto")
 	public ModelAndView alterarProduto(@Validated @ModelAttribute("produto") Produtos prd, BindingResult result, ModelMap model, HttpSession session) {
-		
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
 		prd.setTsAtualizacao(timestamp);
 		prdDao.atualizar(prd);
@@ -453,6 +504,7 @@ public class LojaVirtualController {
 		
 		usu.setIp(getIp());
 		usu.setLogin(usu.getEmail().toLowerCase());
+		usu.setAdminLoja("N");
 		usuDao.atualizar(usu);
 		Usuario usuarioSessao = new Usuario();
 		usuarioSessao.setNome(usu.getNome().split(" ")[0]);
@@ -465,6 +517,7 @@ public class LojaVirtualController {
 		return new ModelAndView("index", model);
 	}
 	
+	/*Informacoes básicas da página*/
 	private ModelMap informacoesBasicasPagina(ModelMap model, HttpSession session, Log log) {
 		model.addAttribute("categorias", catDao.recuperarTodos());
 		Usuario usuarioSessao = recuperarDaSessao(session);
@@ -533,6 +586,21 @@ public class LojaVirtualController {
 		return new ModelAndView("redirect:home", model);
 	}
 	
+	private Boolean isAdminSite(Usuario usuSessao) {
+		if(usuSessao !=null ) {
+			
+			Usuario usuBd = usuDao.recuperarPorId(usuSessao.getIdUsuario());
+			
+			if(usuBd !=null && usuBd.getAdminLoja()!= null && usuBd.getAdminLoja().equals("S")) {
+				return new Boolean(true);
+			}else {
+				return new Boolean(false);
+			}
+		}else {
+			return new Boolean(false);
+		}
+	}
+	
 	/*monta mensagens para exibir no site*/
 	private ModelMap mensagem(String mensagem, ModelMap model, HttpSession session) {
 		model.addAttribute("mensagem", mensagem);
@@ -563,4 +631,44 @@ public class LojaVirtualController {
 			return "0.0.0.0";
 		}
 	}
+	
+	
+	/**
+	 * SECAO ADMIN DO SITE
+	 */
+	
+	@RequestMapping(value = "/admin", method = RequestMethod.GET) 
+	public ModelAndView admin(ModelMap model, HttpSession session) {
+		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa -  IP: "+getIp(), TipoLog.AREA_ADMIN, getIp(), "admin");
+		model = informacoesBasicasAdmin(model, session, log);
+		return new ModelAndView("loginAdmin", model);
+	}
+	
+	/*Informacoes básicas da página*/
+	private ModelMap informacoesBasicasAdmin(ModelMap model, HttpSession session, Log log) {
+		//model.addAttribute("categorias", catDao.recuperarTodos());
+		Usuario usuarioSessao = recuperarDaSessao(session);
+		
+		if(null != usuarioSessao) {
+			model.addAttribute("linkSair", "sair");
+		}
+		
+		if(null != log) {
+			gravarLog(log);
+		}
+		
+		return model;
+	}
+	
+	/*salva o usuário na sessao*/
+	private void salvarNaSessaoAdmin(@RequestParam Usuario usuario, HttpSession session) {
+		session.setAttribute("admin", usuario);
+	}
+	
+	/*recupera o usuario da sessao*/
+	private Usuario recuperarDaSessaoAdmin(HttpSession session) {
+		Usuario loginSessao = (Usuario)session.getAttribute("admin");
+		return loginSessao;
+	}
+	
 }

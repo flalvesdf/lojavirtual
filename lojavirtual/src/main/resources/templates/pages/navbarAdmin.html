@@ -1,0 +1,33 @@
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header" >
+        <div class="header__top" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+								<i class="fa fa-user" style="color:#ffffff;!important"></i> 
+								<a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#ffffff;!important" >
+									Entrar
+								</a>
+                               	<a th:if="${linkSair !=null}" th:href=${linkSair} style="color:#ffffff;!important">
+                               		<i class="fa fa-times" style="color:#ffffff;!important"></i> Sair
+                               	</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+        </div>
+    </header>
+    <!-- Header Section End -->

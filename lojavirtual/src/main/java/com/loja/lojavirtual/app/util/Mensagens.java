@@ -14,4 +14,5 @@ public class Mensagens {
 	public static final String MSG_PRODUTO_JA_SALVO_NA_WL = "Produto já consta em sua lista de desejos.";
 	public static final String MSG_ADD_CARRINHO_SEM_LOGIN = "Para incluir o produto no carrinho é necessário se cadastrar ou se registrar antes.";
 	public static final String MSG_ADD_CARRINHO_PRODUTO = "Produto incluído com sucesso";
+	public static final String MSG_ADMIN_SITE = "Acesso permitido apenas ao administrador do Site";
 }

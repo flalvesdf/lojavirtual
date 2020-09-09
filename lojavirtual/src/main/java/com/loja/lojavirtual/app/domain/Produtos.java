@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "produtos")
@@ -51,6 +52,61 @@ public class Produtos {
 	@Column(name="categoria", nullable = false)
 	private String categoria;
 	
+	@Column(name="peso", nullable = false)
+	private Double peso;
+	
+	@Column(name="altura", nullable = false)
+	private Integer altura;
+	
+	@Column(name="largura", nullable = false)
+	private Integer largura;
+	
+	@Column(name="comprimento", nullable = false)
+	private Integer comprimento;
+	
+	@Transient
+	private Categoria categoriaProduto;
+	
+	public Categoria getCategoriaProduto() {
+		return categoriaProduto;
+	}
+
+	public void setCategoriaProduto(Categoria categoriaProduto) {
+		this.categoriaProduto = categoriaProduto;
+	}
+
+	public Double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Double peso) {
+		this.peso = peso;
+	}
+
+	public Integer getAltura() {
+		return altura;
+	}
+
+	public void setAltura(Integer altura) {
+		this.altura = altura;
+	}
+
+	public Integer getLargura() {
+		return largura;
+	}
+
+	public void setLargura(Integer largura) {
+		this.largura = largura;
+	}
+
+	public Integer getComprimento() {
+		return comprimento;
+	}
+
+	public void setComprimento(Integer comprimento) {
+		this.comprimento = comprimento;
+	}
+
 	public String getCategoria() {
 		return categoria;
 	}

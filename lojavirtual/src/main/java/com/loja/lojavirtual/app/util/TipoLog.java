@@ -12,4 +12,5 @@ public class TipoLog {
 	public static final String CAD_PRODUTO = "H";
 	public static final String PRODUTO_SALVO_WISH_LIST = "I";
 	public static final String PRODUTO_ADD_CARRINHO = "J";
+	public static final String AREA_ADMIN = "H";
 }

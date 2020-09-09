@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<span th:insert="pages/head"></span>
+</head>
+
+<body>
+		<span th:insert="pages/navbarAdmin">  </span>
+        <div class="container">
+        <div class="row">
+        	<div style="height: 50px;"></div>
+        </div>
+            <div class="row">
+            
+                <div class="col-lg-12">
+                
+                <div class="section-title">
+                    <h2 >Bem vindo à Administração do seu Site. Autentique-se</h2>
+                </div>
+					<form th:action="@{/admin/verificaLoginAdmin}" th:method="post" th:object="${usu}">
+	                    <div class="row">
+	                        <div class="col-lg-12 col-md-6">
+	                            
+	                            
+	                            
+	                            <div class="row">
+		                           
+	                                <div class="col-lg-6">
+	                                    <div class="checkout__input">
+	                                        <p>Seu CPF<span>*</span></p>
+	                                        <input type="text" id="cpf" name="cpf">
+	                                    </div>
+	                                </div>
+	                                <div class="col-lg-6">
+	                                    <div class="checkout__input">
+	                                        <p>Sua senha<span>*</span></p>
+	                                        <input type="password" id="senha" name="senha">
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <center><button type="submit" class="site-btn">Entrar</button></center>
+	
+	                        </div>
+	
+	                    </div>
+	                </form>
+                </div>
+               
+                </div>
+            </div>
+        </div>
+<!-- Js Plugins -->
+<span th:insert="pages/scriptsjs">  </span>
+</body>
+	
+</html>

@@ -1,13 +1,35 @@
 package com.loja.lojavirtual.app.util;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.loja.lojavirtual.app.domain.CalculadoraCorreios;
 import com.loja.lojavirtual.app.domain.Produtos;
+import com.loja.lojavirtual.app.domain.Usuario;
 import com.loja.lojavirtual.app.domain.Venda;
 import com.loja.lojavirtual.app.domain.WishList;
 
 public class ConstrutorExibicaoProduto {
+	
+	public static String exibeProdutoDestaque(Produtos produto) {
+
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<div class=\"hero__item set-bg\" data-setbg=\""+produto.getUrlImagem()+"\">");
+		sb.append("<div class=\"hero__text\">");
+		sb.append("<span>"+produto.getCategoriaProduto().getNome()+"</span>");
+		sb.append("<h2>"+produto.getNome()+"</h2>");
+		sb.append("<p>"+produto.getDescricao()+"</p>");
+		
+		sb.append("<a href=\"addCarrinho\" class=\"primary-btn\">Comprar</a>&nbsp;&nbsp;");
+		sb.append("<a href=\"salvarNaWishList\" class=\"primary-btn\">Salvar</a>");
+		sb.append("</div>");
+		sb.append("</div>");
+
+		return sb.toString();
+
+	}
 
 	public static String exibeProduto(Produtos produto) {
 
@@ -59,7 +81,7 @@ public class ConstrutorExibicaoProduto {
 
 	}
 
-	public static String exibirWishList(List<WishList> wl) {
+	public static String exibirWishList(List<WishList> wl, Usuario comprador) {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("<table>");
@@ -74,7 +96,9 @@ public class ConstrutorExibicaoProduto {
 		sb.append("</thead>");
 		sb.append("<tbody>");
 
+		List<Produtos> lsProdutos = new ArrayList<Produtos>();
 		Double valorFinal = 0.0;
+		
 		for(WishList wish:wl) {
 
 			sb.append("<tr>");
@@ -102,8 +126,18 @@ public class ConstrutorExibicaoProduto {
 			sb.append("</tr>");
 
 			valorFinal += (wish.getProduto().getPrecoVenda() * wish.getQuantidade());
+			wish.getProduto().setQuantidade(wish.getQuantidade());
+			lsProdutos.add(wish.getProduto());
 		}
 
+		
+		CalculadoraCorreios calculo = CalculaValorPrazoEntrega.preparaObjetoParaCalculo(lsProdutos, comprador.getCep());
+		calculo = CalculaValorPrazoEntrega.calculaPrazoEntregaValor(calculo);
+		valorFinal += Double.parseDouble(calculo.getValorFrete());
+		String dimensoes = "Peso: "+calculo.getnVlPeso() + " / Altura: "+calculo.getnVlAltura() + " / Largura: "+ calculo.getnVlLargura() + " / Comprimento: "+ calculo.getnVlComprimento();
+		//System.out.print(dimensoes);
+		sb.append("<tr><td class=\"shoping__cart__price\" colspan=\"5\" align=\"right\">Entrega para o CEP "+comprador.getCep()+" : "+ calculo.getPrazoEntrega() + " dias. Valor transporte: " +NumberFormat.getCurrencyInstance().format(Double.parseDouble(calculo.getValorFrete())) + "</td></tr>");
+		sb.append("<tr><td class=\"shoping__cart__price\" colspan=\"5\" align=\"right\">Mensagem Correios: "+ calculo.getMsgErro() + dimensoes +" </td></tr>");
 		sb.append("<tr><td class=\"shoping__cart__price\" colspan=\"5\" align=\"right\">"+NumberFormat.getCurrencyInstance().format(valorFinal) + "</td></tr>");
 
 		sb.append("</tbody>");
@@ -112,25 +146,34 @@ public class ConstrutorExibicaoProduto {
 		return sb.toString();
 	}
 	
-	public static String checkout(List<Venda> itens) {
+	public static String checkout(List<Venda> itens, Usuario comprador) {
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append("<ul>");
 		Double valorFinal = 0.0;
+		List<Produtos> lsProdutos = new ArrayList<Produtos>();
+		
 		for(Venda item: itens) {
 			sb.append("<li>(" +item.getQuantidadeProduto() +") "+item.getProduto().getNome()+"<span>"+NumberFormat.getCurrencyInstance().format(item.getProduto().getPrecoVenda())+"</span></li>");
 			valorFinal += (item.getProduto().getPrecoVenda() * item.getQuantidadeProduto());
+			item.getProduto().setQuantidade(item.getQuantidadeProduto());
+			lsProdutos.add(item.getProduto());
 		}
 		
 		sb.append("</ul>");
 		
+		CalculadoraCorreios calculo = CalculaValorPrazoEntrega.preparaObjetoParaCalculo(lsProdutos, comprador.getCep());
+		calculo = CalculaValorPrazoEntrega.calculaPrazoEntregaValor(calculo);
+		valorFinal += Double.parseDouble(calculo.getValorFrete());
+		
+		sb.append("<div class=\"checkout__order__total\">Total <span>Entrega: "+ calculo.getPrazoEntrega() + " dias. Valor transporte: " +NumberFormat.getCurrencyInstance().format(Double.parseDouble(calculo.getValorFrete())) + "</span></div>");
 		sb.append("<div class=\"checkout__order__total\">Total <span>"+NumberFormat.getCurrencyInstance().format(valorFinal)+"</span></div>");
 		
 		return sb.toString();
 	}
 
 
-	public static String exibirProdutosCarrinho(List<Venda> itens) {
+	public static String exibirProdutosCarrinho(List<Venda> itens, Usuario comprador) {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("<table>");
@@ -146,6 +189,7 @@ public class ConstrutorExibicaoProduto {
 		sb.append("<tbody>");
 
 		Double valorFinal = 0.0;
+		List<Produtos> lsProdutos = new ArrayList<Produtos>();
 		for(Venda item:itens) {
 
 			sb.append("<tr>");
@@ -173,8 +217,16 @@ public class ConstrutorExibicaoProduto {
 			sb.append("</tr>");
 
 			valorFinal += (item.getProduto().getPrecoVenda() * item.getQuantidadeProduto());
+			item.getProduto().setQuantidade(item.getQuantidadeProduto());
+			lsProdutos.add(item.getProduto());
 		}
 
+		
+		CalculadoraCorreios calculo = CalculaValorPrazoEntrega.preparaObjetoParaCalculo(lsProdutos, comprador.getCep());
+		calculo = CalculaValorPrazoEntrega.calculaPrazoEntregaValor(calculo);
+		valorFinal += Double.parseDouble(calculo.getValorFrete());
+		
+		sb.append("<tr><td class=\"shoping__cart__price\" colspan=\"5\" align=\"right\">Entrega: "+ calculo.getPrazoEntrega() + " dias. Valor transporte: " +NumberFormat.getCurrencyInstance().format(Double.parseDouble(calculo.getValorFrete())) + "</td></tr>");
 		sb.append("<tr><td class=\"shoping__cart__price\" colspan=\"5\" align=\"right\">"+NumberFormat.getCurrencyInstance().format(valorFinal) + "</td></tr>");
 
 		sb.append("</tbody>");
