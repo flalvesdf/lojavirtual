@@ -4,6 +4,10 @@
         <span>Todos as seções</span>
     </div>
     <ul>
-        <li th:each="cat : ${categorias}"><a href="#" th:text="${cat.nome}"></a></li>
+        <li th:each="cat : ${categorias}"><a th:href="'javascript:acionarCategoria(\'' + ${cat.id} + '\');'" th:text="${cat.nome}"></a></li>
     </ul>
 </div>
+
+<form name="formCategorias" th:action="@{categorias}" method="get">
+	<input type="hidden" value="" id="idCategoria" name="idCategoria">
+</form>

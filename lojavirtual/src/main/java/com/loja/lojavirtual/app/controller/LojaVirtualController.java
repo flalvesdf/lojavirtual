@@ -3,6 +3,7 @@ package com.loja.lojavirtual.app.controller;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,9 +29,12 @@ import com.loja.lojavirtual.app.dao.ProdutoDao;
 import com.loja.lojavirtual.app.dao.UsuarioDao;
 import com.loja.lojavirtual.app.dao.VendaDao;
 import com.loja.lojavirtual.app.dao.WishListDao;
+import com.loja.lojavirtual.app.domain.Categoria;
 import com.loja.lojavirtual.app.domain.Log;
 import com.loja.lojavirtual.app.domain.Produtos;
 import com.loja.lojavirtual.app.domain.Usuario;
+import com.loja.lojavirtual.app.domain.Venda;
+import com.loja.lojavirtual.app.domain.VendaId;
 import com.loja.lojavirtual.app.domain.WishList;
 import com.loja.lojavirtual.app.domain.WishListId;
 import com.loja.lojavirtual.app.util.ConstrutorExibicaoProduto;
@@ -66,11 +70,39 @@ public class LojaVirtualController {
 		return new ModelAndView("index", model);
 	}
 	
+	@RequestMapping(value = "/home", method = RequestMethod.GET) 
+	public ModelAndView home2(ModelMap model, HttpSession session) {
+		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Página Inicial", TipoLog.HOME, getIp(), "Home");	
+		model = informacoesBasicasPagina(model, session, log);
+		return new ModelAndView("index", model);
+	}
+	
 	@RequestMapping(value = "/carrinho", method = RequestMethod.GET) 
 	public ModelAndView carrinho(ModelMap model, HttpSession session) { 
 		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Carrinho", TipoLog.SECAO, getIp(), "carrinho");
 		model = informacoesBasicasPagina(model, session, log);
-		return new ModelAndView("shopping-cart", model);
+		
+		Usuario uSessao = recuperarDaSessao(session);
+		
+		if(null == uSessao) {
+			model.addAttribute("mensagem", "Para acessar o carrinho de compras você precisa se registrar.");
+			model = informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("login", model);
+		}else {
+			List<Venda> carrinhoUsuario = vendaDao.recuperarVendasUsuarioNaoFinalizada(uSessao.getIdUsuario());
+			List<Venda> novoCarrinhoUsuario = new ArrayList<>();
+			
+			for(Venda venda: carrinhoUsuario) {
+				Produtos p = prdDao.recuperarPorId(venda.getId().getIdProduto());
+				venda.setProduto(p);
+				novoCarrinhoUsuario.add(venda);
+			}
+			
+			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario);
+			model.addAttribute("carrinho", produtosCarrinho);
+			return new ModelAndView("carrinho", model);
+		}
+		
 	}
 	
 	@RequestMapping(value = "/wishlist", method = RequestMethod.GET) 
@@ -101,9 +133,39 @@ public class LojaVirtualController {
 	
 	@RequestMapping(value = "/checkout", method = RequestMethod.GET) 
 	public ModelAndView checkout(ModelMap model, HttpSession session) { 
+//		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Checkout", TipoLog.SECAO, getIp(), "checkout");
+//		model = informacoesBasicasPagina(model, session, log);
+//		return new ModelAndView("checkout", model);
+		
+		
 		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Checkout", TipoLog.SECAO, getIp(), "checkout");
 		model = informacoesBasicasPagina(model, session, log);
-		return new ModelAndView("checkout", model);
+		
+		Usuario uSessao = recuperarDaSessao(session);
+		
+		if(null == uSessao) {
+			model.addAttribute("mensagem", "Para acessar o carrinho de compras você precisa se registrar.");
+			model = informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("login", model);
+		}else {
+			List<Venda> carrinhoUsuario = vendaDao.recuperarVendasUsuarioNaoFinalizada(uSessao.getIdUsuario());
+			List<Venda> novoCarrinhoUsuario = new ArrayList<>();
+			
+			for(Venda venda: carrinhoUsuario) {
+				Produtos p = prdDao.recuperarPorId(venda.getId().getIdProduto());
+				venda.setProduto(p);
+				novoCarrinhoUsuario.add(venda);
+			}
+			
+			String produtosCarrinho = ConstrutorExibicaoProduto.checkout(novoCarrinhoUsuario);
+			model.addAttribute("carrinho", produtosCarrinho);
+			return new ModelAndView("checkout", model);
+		}
+		
+		
+		
+		
+		
 	}
 	
 	@RequestMapping(value = "/contato", method = RequestMethod.GET) 
@@ -220,12 +282,7 @@ public class LojaVirtualController {
 	@PutMapping("/cadastrarUsuario")
 	public ModelAndView cadastrarUsuario(@Validated @ModelAttribute("usu") Usuario usu, BindingResult result, ModelMap model, HttpSession session) {
 		
-		try {
-			usu.setIp(InetAddress.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e) {
-			//faz nada
-		}
-		
+		usu.setIp(getIp());
 		usu.setLogin(usu.getEmail().toLowerCase());
 		usu.setAdminLoja("N");//default N
 		usuDao.salvar(usu);
@@ -238,6 +295,90 @@ public class LojaVirtualController {
 		model = informacoesBasicasPagina(model, session, log);
 		model = mensagem(Mensagens.MSG_DADOS_REGISTRADOS, model, session);
 		return new ModelAndView("index", model);
+	}
+	
+	@RequestMapping(value = "/addCarrinho", method = RequestMethod.GET) 
+	public ModelAndView addCarrinho(@Validated @ModelAttribute("idProdutoCarrinho") Integer idProdutoCarrinho, BindingResult result, ModelMap model, HttpSession session) {
+		
+		Usuario usuSessao = recuperarDaSessao(session);
+		Produtos prd = prdDao.recuperarPorId(idProdutoCarrinho);
+		
+		if(null == usuSessao) {
+			model = mensagem(Mensagens.MSG_ADD_CARRINHO_SEM_LOGIN, model, session);
+			Log log = new Log(idProdutoCarrinho, 0, new Timestamp(System.currentTimeMillis()), "Tentando salvar produto no carrinho sem login:"+idProdutoCarrinho, TipoLog.PRODUTO_ADD_CARRINHO, getIp(), "addCarrinho");
+			gravarLog(log);
+			
+			Log log2 = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: login", TipoLog.SECAO, getIp(), "login");
+			model = informacoesBasicasPagina(model, session, log2);
+			return new ModelAndView("login", model);
+		}else {
+			Integer idVendaUsuNaoFinalizada = vendaDao.recuperarVendaUsuarioNaoFinalizada(usuSessao.getIdUsuario());
+			
+			if(idVendaUsuNaoFinalizada == 0) {
+				//tem q iniciar outra venda
+				Integer maxId = vendaDao.getMaxId();
+				if(maxId == null)maxId = 0;
+				
+				Venda itemNovo = new Venda();
+				VendaId idItemnovo = new VendaId();
+				idItemnovo.setId(maxId+1);
+				idItemnovo.setIdProduto(idProdutoCarrinho);
+				idItemnovo.setIdUsuario(usuSessao.getIdUsuario());
+				itemNovo.setId(idItemnovo);
+				itemNovo.setQuantidadeProduto(1);
+				itemNovo.setVendaFinalizada("N");
+				itemNovo.setValorUnidadeProduto(prd.getPrecoVenda());
+				itemNovo.setValorTotalProduto(prd.getPrecoVenda() * 1);
+				itemNovo.setTsVenda(new Timestamp(System.currentTimeMillis()));
+				
+				vendaDao.salvar(itemNovo);
+				
+			}else {
+				List<Venda> vendaEmAberto = vendaDao.recuperarPorId(idVendaUsuNaoFinalizada);
+				
+				for(Venda venda: vendaEmAberto) {
+					//produto já está no carrinho de compras
+					if(venda.getId().getIdProduto() == idProdutoCarrinho) {
+						Log log2 = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: carrinho", TipoLog.SECAO, getIp(), "addCarrinho");
+						model = informacoesBasicasPagina(model, session, log2);
+						return new ModelAndView("login", model);
+					}
+				}
+				
+				Venda itemNovo = new Venda();
+				VendaId idItemnovo = new VendaId();
+				idItemnovo.setId(idVendaUsuNaoFinalizada);
+				idItemnovo.setIdProduto(idProdutoCarrinho);
+				idItemnovo.setIdUsuario(usuSessao.getIdUsuario());
+				itemNovo.setId(idItemnovo);
+				itemNovo.setQuantidadeProduto(1);
+				itemNovo.setVendaFinalizada("N");
+				itemNovo.setValorUnidadeProduto(prd.getPrecoVenda());
+				itemNovo.setValorTotalProduto(prd.getPrecoVenda() * 1);
+				itemNovo.setTsVenda(new Timestamp(System.currentTimeMillis()));
+				
+				vendaDao.salvar(itemNovo);
+				
+			}
+			
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Produto adicionado no carrinho:"+idProdutoCarrinho, TipoLog.PRODUTO_ADD_CARRINHO, getIp(), "addCarrinho");
+			
+			model = informacoesBasicasPagina(model, session, log);
+			model = mensagem(Mensagens.MSG_ADD_CARRINHO_PRODUTO, model, session);
+			
+			List<Venda> carrinhoUsuario = vendaDao.recuperarVendasUsuarioNaoFinalizada(usuSessao.getIdUsuario());
+			List<Venda> novoCarrinhoUsuario = new ArrayList<>();
+			
+			for(Venda venda: carrinhoUsuario) {
+				Produtos p = prdDao.recuperarPorId(venda.getId().getIdProduto());
+				venda.setProduto(p);
+				novoCarrinhoUsuario.add(venda);
+			}
+			
+			String produtosCarrinho = ConstrutorExibicaoProduto.exibirProdutosCarrinho(novoCarrinhoUsuario);
+			model.addAttribute("carrinho", produtosCarrinho);
+			return new ModelAndView("carrinho", model);
+		}
 	}
 	
 	@RequestMapping(value = "/salvarNaWishList", method = RequestMethod.GET) 
@@ -336,10 +477,21 @@ public class LojaVirtualController {
 			model.addAttribute("linkWishlist", "wishlist");
 			List<WishList> wl = wlDao.recuperarPorId(usuarioSessao.getIdUsuario());
 			model.addAttribute("wl", wl.size());
+			List<Venda> carrinhoUsuario = vendaDao.recuperarVendasUsuarioNaoFinalizada(usuarioSessao.getIdUsuario());
+			Double valor = 0.0;
+			for(Venda item:carrinhoUsuario) {
+				Produtos p = prdDao.recuperarPorId(item.getId().getIdProduto());
+				valor += (p.getPrecoVenda() * item.getQuantidadeProduto());
+			}
+			
+			model.addAttribute("shopcar", carrinhoUsuario.size());
+			model.addAttribute("shopcarvalor", NumberFormat.getCurrencyInstance().format(valor));
+			model.addAttribute("shopcarlink", "carrinho");
 		}else {
 			model.addAttribute("logado", "Entrar");
-			model.addAttribute("linkParaUsuario", "login?mensagem=\"\"");
-			model.addAttribute("linkWishlist", "");
+			model.addAttribute("linkParaUsuario", "login");
+			model.addAttribute("linkWishlist", "login");
+			model.addAttribute("shopcarlink", "login");
 		}
 		
 		if(null != log) {
@@ -349,14 +501,36 @@ public class LojaVirtualController {
 		return model;
 	}
 	
+	@RequestMapping(value="/categorias", method=RequestMethod.GET)
+	public ModelAndView categorias(@Validated @ModelAttribute("idCategoria") Integer idCategoria, BindingResult result, ModelMap model, HttpSession session) {
+		
+		Categoria categoria = catDao.recuperarPorId(idCategoria);
+		List<Produtos> produtosCategoria = prdDao.recuperarTodosPorCategoria(idCategoria);
+		String resultado = "";
+		
+		if(null == produtosCategoria) {
+			resultado = "";
+		}else {
+			resultado = ConstrutorExibicaoProduto.exibeProdutos(produtosCategoria);
+		}
+
+		model.addAttribute("retornoPesquisa", "Produtos da Categoria "+categoria.getNome());
+		model.addAttribute("produtos", resultado.length()>0?resultado:"<center>Desculpe, não encontramos nenhum produto na categoria "+ categoria.getNome()+"</center>");
+		
+		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: categoria:"+idCategoria, TipoLog.SECAO, getIp(), "categoria");
+		model = informacoesBasicasPagina(model, session, log);
+		return new ModelAndView("pesquisa", model);
+	}
+	
 	@GetMapping("/sair")
 	public ModelAndView sair(ModelMap model, HttpSession session) {
 		Usuario loginSessao = recuperarDaSessao(session);
 		Log log = new Log(0, loginSessao.getIdUsuario(), new Timestamp(System.currentTimeMillis()), "Saindo do Site:"+loginSessao.getEmail(), TipoLog.SECAO, getIp(), "sair");	
-		session.invalidate();
+		gravarLog(log);
 		model = mensagem(Mensagens.MSG_SESSAO_ENCERRADA, model, session);
-		model = informacoesBasicasPagina(model, session, log);
-		return new ModelAndView("index", model);
+		//model = informacoesBasicasPagina(model, session, log);
+		session.invalidate();
+		return new ModelAndView("redirect:home", model);
 	}
 	
 	/*monta mensagens para exibir no site*/

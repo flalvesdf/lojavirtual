@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="vendas")
@@ -32,6 +33,17 @@ public class Venda {
 	@Column(name = "vendafinalizada")
 	private String vendaFinalizada;
 	
+	@Transient
+	private Produtos produto;
+	
+	public Produtos getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produtos produto) {
+		this.produto = produto;
+	}
+
 	public String getTipoPagamento() {
 		return tipoPagamento;
 	}

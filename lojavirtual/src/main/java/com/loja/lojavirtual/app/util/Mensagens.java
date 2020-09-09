@@ -12,4 +12,6 @@ public class Mensagens {
 	public static final String MSG_SALVAR_WL_SEM_LOGIN = "Para salvar o produto em sua lista de desejos é necessário se cadastrar ou se registrar antes.";
 	public static final String MSG_SALVAR_WL_COM_LOGIN = "Produto salvo em sua lista de desejos.";
 	public static final String MSG_PRODUTO_JA_SALVO_NA_WL = "Produto já consta em sua lista de desejos.";
+	public static final String MSG_ADD_CARRINHO_SEM_LOGIN = "Para incluir o produto no carrinho é necessário se cadastrar ou se registrar antes.";
+	public static final String MSG_ADD_CARRINHO_PRODUTO = "Produto incluído com sucesso";
 }

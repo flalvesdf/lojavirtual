@@ -11,28 +11,28 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span th:text="${wl}">0</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>30</span></a></li>
+                <li><a th:href=${linkWishlist}><i class="fa fa-heart"></i> <span th:text="${wl}">0</span></a></li>
+                <li><a th:href=${shopcarlink}><i class="fa fa-shopping-bag"></i> <span th:text="${shopcar}">30</span></a></li>
             </ul>
-            <div class="header__cart__price">item: <span>R$ 0.00</span></div>
+            <div class="header__cart__price">item: <span th:text="${shopcarvalor}">R$ 0.00</span></div>
         </div>
 
-        <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
-                <li><a href="#">Pages</a>
-                    <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
-                    </ul>
-                </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
-            </ul>
-        </nav>
+<!--         <nav class="humberger__menu__nav mobile-menu"> -->
+<!--             <ul> -->
+<!--                 <li class="active"><a href="./index.html">Home</a></li> -->
+<!--                 <li><a href="./shop-grid.html">Shop</a></li> -->
+<!--                 <li><a href="#">Pages</a> -->
+<!--                     <ul class="header__menu__dropdown"> -->
+<!--                         <li><a href="./shop-details.html">Shop Details</a></li> -->
+<!--                         <li><a href="./shoping-cart.html">Shoping Cart</a></li> -->
+<!--                         <li><a href="./checkout.html">Check Out</a></li> -->
+<!--                         <li><a href="./blog-details.html">Blog Details</a></li> -->
+<!--                     </ul> -->
+<!--                 </li> -->
+<!--                 <li><a href="./blog.html">Blog</a></li> -->
+<!--                 <li><a href="./contact.html">Contact</a></li> -->
+<!--             </ul> -->
+<!--         </nav> -->
         <div id="mobile-menu-wrap"></div>
         <div class="header__top__right__social">
             <a href="#"><i class="fa fa-facebook"></i></a>
@@ -54,24 +54,34 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <li ><i class="fa fa-user"></i> <a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#000;!important" ><i class="fa fa-user"></i> Entrar</a></li>
-                                <li></li>
-                            </ul>
-                        </div>
+<!--                         <div class="header__top__left"> -->
+<!--                             <ul> -->
+<!--                                 <li ><i class="fa fa-user"></i> <a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#000;!important" ><i class="fa fa-user"></i> Entrar</a></li> -->
+<!--                                 <li></li> -->
+<!--                             </ul> -->
+<!--                         </div> -->
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
+<!--                                 <a href="#"><i class="fa fa-facebook"></i></a> -->
+<!--                                 <a href="#"><i class="fa fa-twitter"></i></a> -->
+
+									<i class="fa fa-user"></i> <a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#000;!important" ><i class="fa fa-user"></i> Entrar</a>
+                                	<a th:if="${linkSair !=null}" th:href=${linkSair}><i class="fa fa-times"></i> Sair</a></li>
+
 								
                             </div>
 
-                            <div class="header__top__right__auth">
-                                <a th:if="${linkSair !=null}" th:href=${linkSair}><i class="fa fa-times"></i> Sair</a>
-                            </div>
+<!--                             <div class="header__top__right__auth"> -->
+<!--                             	<ul> -->
+<!--                                 	<li ><i class="fa fa-user"></i> <a th:href="${linkParaUsuario}" th:text="${logado}" style="color:#000;!important" ><i class="fa fa-user"></i> Entrar</a></li> -->
+<!--                                 	<li><a th:if="${linkSair !=null}" th:href=${linkSair}><i class="fa fa-times"></i> Sair</a></li> -->
+<!--                             	</ul> -->
+                            
+                            
+                                
+<!--                             </div> -->
                         </div>
                     </div>
                 </div>
@@ -96,9 +106,9 @@
                     <div class="header__cart">
                         <ul>
                             <li><a th:href=${linkWishlist}><i class="fa fa-heart"></i> <span th:text="${wl}">0</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                            <li><a th:href=${shopcarlink}><i class="fa fa-shopping-bag"></i> <span th:text="${shopcar}">0</span></a></li>
                         </ul>
-                        <div class="header__cart__price"><span>R$ 0.00</span></div>
+                        <div class="header__cart__price"><span th:text="${shopcarvalor}">R$ 0.00</span></div>
                     </div>
                 </div>
             </div>

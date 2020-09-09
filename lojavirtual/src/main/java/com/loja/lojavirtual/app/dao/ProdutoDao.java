@@ -25,6 +25,18 @@ public class ProdutoDao {
 	public List<Produtos> recuperarTodos() {
 		return em.createQuery("select a from Produtos a order by a.nome asc", Produtos.class).getResultList();
 	}
+	
+	public List<Produtos> recuperarTodosPorCategoria(Integer categoria) {
+//		try {
+//			return em.createQuery("select a from Produtos a where a.categoria = :cat", Produtos.class).setParameter("cat", categoria).getResultList();
+//		} catch (Exception e) {
+//			return null;
+//		}
+		Query query = em.createQuery("select a from Produtos a where a.categoria = "+ categoria);
+	    @SuppressWarnings("unchecked")
+		List<Produtos> resultList = query.getResultList();
+		return resultList;
+	}
 
 	public Produtos recuperarPorId(Integer id) {
 		return em.createQuery("select a from Produtos a where a.id = :id", Produtos.class).setParameter("id", id).getSingleResult();

@@ -17,7 +17,7 @@
                 <div class="footer__widget">
                     <h6>Visite nossos produtos</h6>
                     <ul>
-                        <li th:each="cat : ${categorias}"><a href="#" th:text="${cat.nome}"></a></li>
+                        <li th:each="cat : ${categorias}"><a th:href="'javascript:acionarCategoria(\'' + ${cat.id} + '\');'" th:text="${cat.nome}"></a></li>
                         <li><a href="#">Fale conosco</a></li>
                         <li><a href="cadastro">Cadastre-se</a></li>
                         <li><a href="cadastroProduto">Cadastro de Produtos</a></li>

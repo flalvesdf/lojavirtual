@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<span th:insert="pages/head"></span>
+
+</head>
+
+<body>
+
+<form name="form1" method="put">
+<!-- 	<input type="hidden" id="idProduto" name="idProduto" > -->
+</form>
+
+<span th:insert="pages/navbar">  </span>
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+					<span th:insert="pages/menu"></span>
+                </div>
+                <div class="col-lg-9">
+                	<span th:insert="pages/pesquisar"></span>
+                	
+        			<span th:insert="pages/mensagem"></span>
+                	
+                	    <section class="featured spad">
+					        <div class="container">
+					            <div class="row">
+					                <div class="col-lg-12">
+					                    <div class="section-title">
+					                        <h2 >Meu carrinho de compras</h2>
+					                    </div>
+					                </div>
+					            </div>
+
+								<!-- Shoping Cart Section Begin -->
+								    <section class="shoping-cart spad">
+								        <div class="container">
+								            <div class="row">
+								                <div class="col-lg-12">
+								                    <div class="shoping__cart__table">
+								                   	 <div class="row featured__filter" th:utext=${carrinho}></div>
+								                    </div>
+								                </div>
+								            </div>
+								            <div class="row">
+								                <div class="col-lg-6">
+								                    <div class="shoping__cart__btns">
+								                        <p align="left"><a href="/home" class="primary-btn">CONTINUE COMPRANDO</a></p>
+								                    </div>
+								                </div>
+								                <div class="col-lg-6">
+								                    <div class="shoping__cart__btns">
+								                        <p align="right"><a href="/checkout" class="primary-btn">CONCLUIR A COMPRA</a></p>
+								                    </div>
+								                </div>
+								            </div>
+								        </div>
+								    </section>
+								<!-- Shoping Cart Section End -->
+
+					        </div>
+				    	</section>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+    <!-- Categories Section Begin -->
+    <section class="categories">
+        <div class="container">
+            <div class="row">
+				
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+<!--     Footer Section Begin -->
+<span th:insert="pages/footer">  </span>
+<!--     Footer Section End -->
+
+<!-- Js Plugins -->
+<span th:insert="pages/scriptsjs">  </span>
+\</body>
+
+</html>

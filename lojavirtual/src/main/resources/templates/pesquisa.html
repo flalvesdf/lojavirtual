@@ -8,6 +8,11 @@
 		document.getElementById("idProduto").value = id;
 		document.form1.submit();
 	}
+	
+	function setarItemCarrinho(id){
+		document.getElementById("idProdutoCarrinho").value = id;
+		document.form2.submit();
+	}
 </script>
 </head>
 
@@ -15,6 +20,10 @@
 
 <form name="form1" th:action="@{salvarNaWishList}" method="put">
 	<input type="hidden" id="idProduto" name="idProduto" >
+</form>
+
+<form name="form2" th:action="@{addCarrinho}" method="put">
+	<input type="hidden" id="idProdutoCarrinho" name="idProdutoCarrinho" >
 </form>
 
 <span th:insert="pages/navbar">  </span>
