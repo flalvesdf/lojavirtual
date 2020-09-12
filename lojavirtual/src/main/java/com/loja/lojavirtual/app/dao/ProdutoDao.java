@@ -23,18 +23,18 @@ public class ProdutoDao {
 	}
 
 	public List<Produtos> recuperarTodos() {
-		return em.createQuery("select a from Produtos a order by a.nome asc", Produtos.class).getResultList();
+		return em.createQuery("select a from Produtos a where a.quantidade > 0 order by a.nome asc", Produtos.class).getResultList();
 	}
 	
 	public List<Produtos> recuperarTodosPorCategoria(Integer categoria) {
-		Query query = em.createQuery("select a from Produtos a where a.categoria = "+ categoria);
+		Query query = em.createQuery("select a from Produtos a where a.categoria = "+ categoria + " and a.quantidade > 0");
 	    @SuppressWarnings("unchecked")
 		List<Produtos> resultList = query.getResultList();
 		return resultList;
 	}
 	
 	public List<Produtos> recuperarProdutosDestaque() {
-		Query query = em.createQuery("select a from Produtos a where a.produtoDestaque = 'S' order by a.tsAtualizacao desc");
+		Query query = em.createQuery("select a from Produtos a where a.produtoDestaque = 'S' and a.quantidade > 0 order by a.tsAtualizacao desc");
 	    @SuppressWarnings("unchecked")
 		List<Produtos> resultList = query.getResultList();
 		return resultList;
@@ -45,7 +45,7 @@ public class ProdutoDao {
 	}
 	
 	public List<Produtos> recuperarPorNome(String nome) {
-		Query query = em.createQuery("select a from Produtos a where lower(a.nome) like '%"+nome.toLowerCase()+"%'");
+		Query query = em.createQuery("select a from Produtos a where lower(a.nome) like '%"+nome.toLowerCase()+"%' and a.quantidade > 0");
 	    @SuppressWarnings("unchecked")
 		List<Produtos> resultList = query.getResultList();
 		return resultList;

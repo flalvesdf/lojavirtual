@@ -194,57 +194,6 @@ public class LojaVirtualController {
 		return new ModelAndView("cadastro", model);
 	}
 	
-	@RequestMapping(value = "/cadastroProduto", method = RequestMethod.GET) 
-	public ModelAndView cadastroProduto(ModelMap model, HttpSession session) { 
-		
-		Usuario usuSessao = recuperarDaSessao(session);
-		
-		if(null!= usuSessao) {
-			if(isAdminSite(usuSessao).booleanValue()) {
-				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
-				model = informacoesBasicasPagina(model, session, log);
-				return new ModelAndView("cadastroProduto", model);
-			}else {
-				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
-				model = informacoesBasicasPagina(model, session, log);
-				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
-				return new ModelAndView("index", model);
-			}
-		}else {
-			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
-			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
-			informacoesBasicasPagina(model, session, log);
-			return new ModelAndView("login", model);
-		}
-	}
-	
-
-	
-	@RequestMapping(value = "/admin/listarProdutos", method = RequestMethod.GET) 
-	public ModelAndView listarProdutos(ModelMap model, HttpSession session) { 
-		
-		Usuario usuSessao = recuperarDaSessao(session);
-		
-		if(null!= usuSessao) {
-			if(isAdminSite(usuSessao).booleanValue()) {
-				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
-				model = informacoesBasicasPagina(model, session, log);
-				model.addAttribute("produtos", prdDao.recuperarTodos());
-				return new ModelAndView("listaProdutos", model);
-			}else {
-				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
-				model = informacoesBasicasPagina(model, session, log);
-				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
-				return new ModelAndView("index", model);
-			}
-		}else {
-			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
-			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
-			informacoesBasicasPagina(model, session, log);
-			return new ModelAndView("login", model);
-		}
-	}
-	
 	@RequestMapping(value = "/login", method = RequestMethod.GET) 
 	public ModelAndView login(ModelMap model, HttpSession session) { 
 		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: login", TipoLog.SECAO, getIp(), "login");
@@ -476,28 +425,7 @@ public class LojaVirtualController {
 		}
 	}
 	
-	@PutMapping("/cadastrarProduto")
-	public ModelAndView cadastrarProduto(@Validated @ModelAttribute("produto") Produtos prd, BindingResult result, ModelMap model, HttpSession session) {
-		
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
-		prd.setTsAtualizacao(timestamp);
-		prdDao.salvar(prd);
-		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Cadastro Produto:"+prd.getNome(), TipoLog.CAD_PRODUTO, getIp(), "cadastrarProduto");
-		model = informacoesBasicasPagina(model, session, log);
-		model = mensagem(Mensagens.MSG_PRODUTO_CADASTRADO, model, session);
-		return new ModelAndView("index", model);
-	}
 	
-	@PutMapping("/alterarProduto")
-	public ModelAndView alterarProduto(@Validated @ModelAttribute("produto") Produtos prd, BindingResult result, ModelMap model, HttpSession session) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
-		prd.setTsAtualizacao(timestamp);
-		prdDao.atualizar(prd);
-		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Alterado Produto:"+prd.getNome(), TipoLog.CAD_PRODUTO, getIp(), "alterarProduto");
-		model = informacoesBasicasPagina(model, session, log);
-		model = mensagem(Mensagens.MSG_PRODUTO_ALTERADO, model, session);
-		return new ModelAndView("index", model);
-	}
 	
 	@PutMapping("/alterarUsuario")
 	public ModelAndView alterarUsuario(@Validated @ModelAttribute("usu") Usuario usu, BindingResult result, ModelMap model, HttpSession session) {
@@ -639,9 +567,211 @@ public class LojaVirtualController {
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET) 
 	public ModelAndView admin(ModelMap model, HttpSession session) {
-		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa -  IP: "+getIp(), TipoLog.AREA_ADMIN, getIp(), "admin");
+		
+		Usuario usu = recuperarDaSessaoAdmin(session);
+		
+		if(null != usu) {
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa -  IP: "+getIp(), TipoLog.AREA_ADMIN, getIp(), "admin");
+			model = informacoesBasicasAdmin(model, session, log);
+			return new ModelAndView("admin", model);
+		}else {
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa -  IP: "+getIp(), TipoLog.AREA_ADMIN, getIp(), "admin");
+			model = informacoesBasicasAdmin(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@RequestMapping(value = "/verificaLoginAdmin", method = RequestMethod.POST) 
+	public ModelAndView verificaLoginAdmin(@Validated @ModelAttribute("usu") Usuario usu, BindingResult result, ModelMap model, HttpSession session) {
+		
+		Usuario usuarioNaBase = usuDao.recuperarPorCPF(usu.getCpf());
+		
+		//encontrou o usuario na base
+		if(null != usuarioNaBase) {
+			if(null != usuarioNaBase.getCep() && null != usuarioNaBase.getSenha()) {
+				//senha confere
+				if(usuarioNaBase.getCpf().equals(usu.getCpf()) && usuarioNaBase.getSenha().equals(usu.getSenha())) {
+					usu.setNome(usuarioNaBase.getNome());
+					usu.setIdUsuario(usuarioNaBase.getIdUsuario());
+					
+					salvarNaSessaoAdmin(usu, session);
+					model = mensagem("Bem vindo "+ usu.getNome().split(" ")[0], model, session);
+					Log log = new Log(0, usuarioNaBase.getIdUsuario(), new Timestamp(System.currentTimeMillis()), "Acesso ao site: Login Administrativo", TipoLog.AREA_ADMIN, getIp(), "verificaLoginAdmin");
+					model = informacoesBasicasAdmin(model, session, log);
+					//model.addAttribute("logado", usuarioNaBase.getNome().split(" ")[0]);
+					return new ModelAndView("admin", model);
+				//senha nao confere	
+				}else {
+					model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+					Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Administrativo - Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "verificaLoginAdmin");
+					informacoesBasicasAdmin(model, session, log);
+					return new ModelAndView("loginAdmin", model);
+				}
+			}else {
+				model = mensagem(Mensagens.MSG_DADOS_N_LOCALIZADOS, model, session);
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Administrativo - Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "verificaLoginAdmin");
+				informacoesBasicasPagina(model, session, log);
+				return new ModelAndView("loginAdmin", model);
+			}
+		//nao encontrou o usuario na base	
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_LOCALIZADOS, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso ao site: Administrativo - Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "verificaLoginAdmin");
+			informacoesBasicasAdmin(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@RequestMapping(value = "/cadastroProduto", method = RequestMethod.GET) 
+	public ModelAndView cadastroProduto(ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessaoAdmin(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				List<Categoria> categorias = catDao.recuperarTodos();
+				model.addAttribute("categorias", categorias);
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				return new ModelAndView("cadastroProduto", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("loginAdmin", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+			informacoesBasicasAdmin(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@PutMapping("/cadastrarProduto")
+	public ModelAndView cadastrarProduto(@Validated @ModelAttribute("produto") Produtos prd, BindingResult result, ModelMap model, HttpSession session) {
+		
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
+		prd.setTsAtualizacao(timestamp);
+		prdDao.salvar(prd);
+		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Cadastro Produto:"+prd.getNome(), TipoLog.CAD_PRODUTO, getIp(), "cadastrarProduto");
 		model = informacoesBasicasAdmin(model, session, log);
-		return new ModelAndView("loginAdmin", model);
+		model = mensagem(Mensagens.MSG_PRODUTO_CADASTRADO, model, session);
+		return new ModelAndView("admin", model);
+	}
+	
+	@PutMapping("/alterarProduto")
+	public ModelAndView alterarProduto(@Validated @ModelAttribute("produto") Produtos prd, BindingResult result, ModelMap model, HttpSession session) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
+		prd.setTsAtualizacao(timestamp);
+		prdDao.atualizar(prd);
+		Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Alterado Produto:"+prd.getNome(), TipoLog.CAD_PRODUTO, getIp(), "alterarProduto");
+		model = informacoesBasicasAdmin(model, session, log);
+		model = mensagem(Mensagens.MSG_PRODUTO_ALTERADO, model, session);
+		return new ModelAndView("admin", model);
+	}
+	
+	@RequestMapping(value = "/alteraProduto", method = RequestMethod.GET) 
+	public ModelAndView alteraProduto(@Validated @ModelAttribute("idProduto") Integer idProduto, BindingResult result, ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessaoAdmin(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				List<Categoria> categorias = catDao.recuperarTodos();
+				model.addAttribute("categorias", categorias);
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "alteraProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				Produtos produto = prdDao.recuperarPorId(idProduto);
+				model.addAttribute("produto", produto);
+				return new ModelAndView("alterarProduto", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("loginAdmin", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@RequestMapping(value = "/listarProdutos", method = RequestMethod.GET) 
+	public ModelAndView listarProdutos(ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessaoAdmin(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastroProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				model.addAttribute("produtos", prdDao.recuperarTodos());
+				return new ModelAndView("listaProdutos", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+				model = informacoesBasicasAdmin(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("loginAdmin", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "cadastrarProduto");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@RequestMapping(value = "/listarUsuarios", method = RequestMethod.GET) 
+	public ModelAndView listarUsuarios(ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessaoAdmin(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "listarUsuarios");
+				model = informacoesBasicasAdmin(model, session, log);
+				model.addAttribute("usuarios", usuDao.recuperarTodos());
+				return new ModelAndView("listaUsuarios", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "listarUsuarios");
+				model = informacoesBasicasAdmin(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("loginAdmin", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "listarUsuarios");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
+	}
+	
+	@RequestMapping(value = "/listarCategorias", method = RequestMethod.GET) 
+	public ModelAndView listarCategorias(ModelMap model, HttpSession session) { 
+		
+		Usuario usuSessao = recuperarDaSessaoAdmin(session);
+		
+		if(null!= usuSessao) {
+			if(isAdminSite(usuSessao).booleanValue()) {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa Permitida -  Usuário: "+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "listarCategorias");
+				model = informacoesBasicasAdmin(model, session, log);
+				model.addAttribute("categorias", catDao.recuperarTodos());
+				return new ModelAndView("listaCategorias", model);
+			}else {
+				Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida:"+usuSessao.getLogin(), TipoLog.AREA_ADMIN, getIp(), "listarCategorias");
+				model = informacoesBasicasAdmin(model, session, log);
+				model = mensagem(Mensagens.MSG_ADMIN_SITE, model, session);
+				return new ModelAndView("loginAdmin", model);
+			}
+		}else {
+			model = mensagem(Mensagens.MSG_DADOS_N_CONFEREM, model, session);
+			Log log = new Log(0, 0, new Timestamp(System.currentTimeMillis()), "Acesso à área administrativa não Permitida: Não Logado/ Dados não conferem", TipoLog.AREA_ADMIN, getIp(), "listarCategorias");
+			informacoesBasicasPagina(model, session, log);
+			return new ModelAndView("loginAdmin", model);
+		}
 	}
 	
 	/*Informacoes básicas da página*/

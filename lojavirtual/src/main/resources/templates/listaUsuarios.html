@@ -6,7 +6,7 @@
 
 <script>
 	function setarValor(id){
-		document.getElementById("idProduto").value = id;
+		document.getElementById("idUsuario").value = id;
 		document.form1.submit();
 	}
 </script>
@@ -30,9 +30,9 @@
 						    <section class="checkout spad">
 						        <div class="container">
 						            <div class="checkout__form">
-						                <h4>Produtos cadastrados</h4>
+						                <h4>Usuários cadastrados</h4>
 						                <form name="form1" th:action="@{alteraProduto}" method="get" >
-						                	<input type="hidden" id="idProduto" name="idProduto" value="idProduto">
+						                	<input type="hidden" id="idUsuario" name="idUsuario" value="">
 						                    <div class="row">
 						                        <div class="col-lg-12 col-md-6">
 						                            
@@ -45,20 +45,24 @@
 						                            		<tr>
 						                            			<th>Id</th>
 												                <th>Nome</th>
-												                <th>Valor de Compra</th>
-												                <th>Valor de Venda</th>
-												                <th>Quantidade</th>
+												                <th>CPF</th>
+												                <th>E-mail</th>
+												                <th>Sexo</th>
+												                <th>Estado</th>
+												                <th>Última compra</th>
 												                <th>#</th>
 						                            		</tr>
 						                            	</thead>
 						                            	<tbody>
-						                            		<tr th:each="produto : ${produtos}">
-						                            			<td th:text="${produto.id}"></td>
-						                            			<td th:text="${produto.nome}"></td>
-						                            			<td th:text="${#numbers.formatCurrency(produto.precoCompra)}"></td>
-						                            			<td th:text="${#numbers.formatCurrency(produto.precoVenda)}"></td>
-						                            			<td th:text="${produto.quantidade}"></td>
-						                            			<td ><a title="Alterar informações do produto" style="color: navy; !important" th:href="'javascript:setarValor(\'' + ${produto.id} + '\');'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+						                            		<tr th:each="usuario : ${usuarios}">
+						                            			<td th:text="${usuario.idUsuario}"></td>
+						                            			<td th:text="${usuario.nome}"></td>
+						                            			<td th:text="${usuario.cpf}"></td>
+						                            			<td th:text="${usuario.email}"></td>
+						                            			<td th:text="${usuario.sexo}"></td>
+						                            			<td th:text="${usuario.estado}"></td>
+						                            			<td ><a title="Alterar informações do usuário" style="color: navy; !important" th:href="'javascript:setarValor(\'' + ${usuario.idUsuario} + '\');'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+						                            			<td> </td>
 						                            		</tr>
 						                            	</tbody>		
 								                   	 

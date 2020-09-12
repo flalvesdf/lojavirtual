@@ -6,123 +6,137 @@
 </head>
 
 <body>
-<span th:insert="pages/navbar">  </span>
-    <!-- Hero Section Begin -->
-    <section class="hero">
+		<span th:insert="pages/navbarAdmin">  </span>
+
         <div class="container">
+        
+        <div class="row">
+        	<div style="height: 50px;"></div>
+        </div>
             <div class="row">
-                <div class="col-lg-3">
-					<span th:insert="pages/menu"></span>
-                </div>
-                <div class="col-lg-9">
-                	<span th:insert="pages/pesquisar"></span>
-                	
+            
+                <div class="col-lg-12">
+                <span th:insert="pages/mensagem"></span>
                 	      <!-- Checkout Section Begin -->
-    <section class="checkout spad">
-        <div class="container">
-	        <span th:insert="pages/mensagem"></span>
-            <div class="checkout__form">
-                <h4>Informações do Produto</h4>
-                <form th:action="@{cadastrarProduto}" th:method="put" th:object="${produto}">
-                
-                <input type="hidden" id="id" name="id" th:value="*{id}">
-                
-                    <div class="row">
-                        <div class="col-lg-12 col-md-6">
-                            <div class="row">
-                            	<div class="col-lg-8">
-                                    <div class="checkout__input">
-                                        <p>Nome do produto<span>*</span></p>
-                                        <input type="text" id="nome" name="nome" th:value="*{nome}">
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-4">
-                                    <div class="checkout__input">
-                                    <p>Categoria do produto<span>*</span></p>
-                                        <select class="form-control" id="categoria" name="categoria" th:field="*{categoria}">
-								    	<option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:utext="${categoria.nome}"/>
-									</select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12">
-                                    <div class="checkout__input">
-                                        <p>Fabricante<span>*</span></p>
-                                        <input type="text" id="fabricante" name="fabricante" th:value="*{fabricante}">
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-12">
-                                    <div class="checkout__input">
-                                        <p>Descrição<span>*</span></p>
-                                        <input type="text" id="descricao" name="descricao" th:value="*{descricao}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="checkout__input">
-                                <p>URL da Imagem<span>*</span></p>
-                                <input type="text" id="urlImagem" name="urlImagem" placeholder="URL da Imagem" th:value="*{urlImagem}">
-                            </div>
-                            
-                            <div class="row">
-<!-- 	                            <div class="checkout__input col-md-8"> -->
-<!-- 	                                <p>Cidade<span>*</span></p> -->
-<!-- 	                                <input type="number" id="quantidade" name="quantidade" class="checkout__input__add"> -->
-<!-- 	                            </div> -->
-	                            <div class="checkout__input col-md-6">
-	                                <p>Produto ativo?<span>*</span></p>
-	                                <select class="form-control" id="ativo" name="ativo" th:field="*{ativo}">
-								    	<option value='S'>Sim</option>
-									  	<option value='N'>Não</option>
-									</select>
-	                            </div>
-	                            
-	                            <div class="checkout__input col-md-6">
-	                                <p>Produto destaque?<span>*</span></p>
-	                                <select class="form-control" id="produtoDestaque" name="produtoDestaque" th:value="*{produtoDestaque}">
-								    	<option value='S'>Sim</option>
-									  	<option value='N'>Não</option>
-									</select>
-	                            </div>
-	                            <div class="checkout__input col-md-6">
-	                                <p>Preço de compra<span>*</span></p>
-	                                <input type="number" step="0.01" id="precoCompra" name="precoCompra" th:value="*{precoCompra}">
-	                            </div>
-	                            
-	                            <div class="checkout__input col-md-6">
-	                                <p>Preço de venda<span>*</span></p>
-	                                <input type="number" step="0.01" id="precoVenda" name="precoVenda" th:value="*{precoVenda}">
-	                            </div>
-	                            
-	                            <div class="checkout__input col-md-6">
-	                                <p>Quantidade<span>*</span></p>
-	                                <input type="number" id="quantidade" name="quantidade" th:value="*{quantidade}">
-	                            </div>
-	                            
-                            <center><button type="submit" class="site-btn">Alterar Informações</button></center>
-
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-    <!-- Checkout Section End -->
-
+						    <section class="checkout spad">
+						        <div class="container">
+						            <div class="checkout__form">
+						                
+						              <h4>Informações do Produto</h4>
+						                <form th:action="@{alterarProduto}" th:method="put" th:object="${produto}">
+						                
+						                <input type="hidden" id="id" name="id" th:value="*{id}">
+						                
+						                    <div class="row">
+						                        <div class="col-lg-12 col-md-6">
+						                            <div class="row">
+						                            	<div class="col-lg-8">
+						                                    <div class="checkout__input">
+						                                        <p>Nome do produto<span>*</span></p>
+						                                        <input type="text" id="nome" name="nome" th:value="*{nome}">
+						                                    </div>
+						                                </div>
+						                                
+						                                <div class="col-lg-4">
+						                                    <div class="checkout__input">
+						                                    <p>Categoria do produto<span>*</span></p>
+						                                        <select class="form-control" id="categoria" name="categoria" th:field="*{categoria}">
+														    	<option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:utext="${categoria.nome}"/>
+															</select>
+						                                    </div>
+						                                </div>
+						                                
+						                                <div class="col-lg-12">
+						                                    <div class="checkout__input">
+						                                        <p>Fabricante<span>*</span></p>
+						                                        <input type="text" id="fabricante" name="fabricante" th:value="*{fabricante}">
+						                                    </div>
+						                                </div>
+						                                
+						                                <div class="col-lg-12">
+						                                    <div class="checkout__input">
+						                                        <p>Descrição<span>*</span></p>
+						                                        <input type="text" id="descricao" name="descricao" th:value="*{descricao}">
+						                                    </div>
+						                                </div>
+						                            </div>
+						                            <div class="checkout__input">
+						                                <p>URL da Imagem<span>*</span></p>
+						                                <input type="text" id="urlImagem" name="urlImagem" placeholder="URL da Imagem" th:value="*{urlImagem}">
+						                            </div>
+						                            
+						                            <div class="row">
+						<!-- 	                            <div class="checkout__input col-md-8"> -->
+						<!-- 	                                <p>Cidade<span>*</span></p> -->
+						<!-- 	                                <input type="number" id="quantidade" name="quantidade" class="checkout__input__add"> -->
+						<!-- 	                            </div> -->
+							                            <div class="checkout__input col-md-6">
+							                                <p>Produto ativo?<span>*</span></p>
+							                                <select class="form-control" id="ativo" name="ativo" th:field="*{ativo}">
+														    	<option value='S'>Sim</option>
+															  	<option value='N'>Não</option>
+															</select>
+							                            </div>
+							                            
+							                            <div class="checkout__input col-md-6">
+							                                <p>Produto destaque?<span>*</span></p>
+							                                <select class="form-control" id="produtoDestaque" name="produtoDestaque" th:value="*{produtoDestaque}">
+														    	<option value='S'>Sim</option>
+															  	<option value='N'>Não</option>
+															</select>
+							                            </div>
+							                            <div class="checkout__input col-md-6">
+							                                <p>Preço de compra<span>*</span></p>
+							                                <input type="number" step="0.01" id="precoCompra" name="precoCompra" th:value="*{precoCompra}">
+							                            </div>
+							                            
+							                            <div class="checkout__input col-md-6">
+							                                <p>Preço de venda<span>*</span></p>
+							                                <input type="number" step="0.01" id="precoVenda" name="precoVenda" th:value="*{precoVenda}">
+							                            </div>
+							                            
+							                            <div class="checkout__input col-md-6">
+							                                <p>Quantidade<span>*</span></p>
+							                                <input type="number" id="quantidade" name="quantidade" th:value="*{quantidade}">
+							                            </div>
+							                            
+							                            <div class="checkout__input col-md-3">
+						                                <p>Peso (Kg)<span>*</span></p>
+						                                <input type="number" step="0.01" id="peso" name="peso" th:value="*{peso}">
+						                            </div>
+						                            
+						                            <div class="checkout__input col-md-3">
+						                                <p>Altura (cm)<span>*</span></p>
+						                                <input type="number"  id="altura" name="altura" th:value="*{altura}">
+						                            </div>
+						                            
+						                            <div class="checkout__input col-md-3">
+						                                <p>Largura (cm)<span>*</span></p>
+						                                <input type="number" step="0.01" id="largura" name="largura" th:value="*{largura}">
+						                            </div>
+						                            
+						                            <div class="checkout__input col-md-3">
+						                                <p>Comprimento (cm)<span>*</span></p>
+						                                <input type="number" step="0.01" id="comprimento" name="comprimento" th:value="*{comprimento}">
+						                            </div>
+							                            
+						                        </div>    
+													<center><button type="submit" class="site-btn">Alterar Informações</button></center>
+						                        </div>
+						
+						                    </div>
+						                </form>
+						                
+						            </div>
+						        </div>
+						    </section>
+						    <!-- Checkout Section End -->
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Hero Section End -->
-
-<!--     Footer Section Begin -->
-<span th:insert="pages/footer">  </span>
-<!--     Footer Section End -->
 
 <!-- Js Plugins -->
 <span th:insert="pages/scriptsjs">  </span>
-\</body>
+</body>
 
 </html>

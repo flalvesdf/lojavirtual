@@ -14,7 +14,7 @@
             <div class="row">
             
                 <div class="col-lg-12">
-                
+                <span th:insert="pages/mensagem"></span>
                 <div class="section-title">
                     <h2 >Bem vindo a Administração do seu site</h2>
                 </div>
@@ -25,7 +25,7 @@
 						      <div class="card-body">
 						        <h5 class="card-title">Produtos</h5>
 						        <p class="card-text">Consulte, altere e inclua novos produtos.</p>
-						        <a href="#" class="btn btn-primary">Cadastrar novo</a> &nbsp; <a href="/admin/listarProdutos" class="btn btn-primary">Lista</a>
+						        <a href="cadastroProduto" class="btn btn-primary">Cadastrar novo</a> &nbsp; <a href="listarProdutos" class="btn btn-primary">Lista</a>
 						      </div>
 						    </div>
 						  </div>
@@ -34,7 +34,7 @@
 						      <div class="card-body">
 						        <h5 class="card-title">Usuários</h5>
 						        <p class="card-text">Saiba quem são seus clientes.</p>
-						        <a href="#" class="btn btn-primary">Cadastrar novo</a> &nbsp; <a href="#" class="btn btn-primary">Lista</a>
+						        <a href="#" class="btn btn-primary">Cadastrar novo</a> &nbsp; <a href="listarUsuarios" class="btn btn-primary">Lista</a>
 						      </div>
 						    </div>
 						  </div>
@@ -48,7 +48,7 @@
 						      <div class="card-body">
 						        <h5 class="card-title">Categorias</h5>
 						        <p class="card-text">Adicione, altere ou exclua categorias de produtos.</p>
-						        <a href="#" class="btn btn-primary">Cadastrar nova</a> &nbsp; <a href="#" class="btn btn-primary">Lista</a>
+						        <a href="#" class="btn btn-primary">Cadastrar nova</a> &nbsp; <a href="listarCategorias" class="btn btn-primary">Lista</a>
 						      </div>
 						    </div>
 						  </div>
@@ -57,9 +57,12 @@
 						      <div class="card-body">
 						        <h5 class="card-title">Vendas</h5>
 						        <p class="card-text">Saiba como foram suas vendas.</p>
-						        <a href="#" class="btn btn-primary">Hoje</a> &nbsp; <a href="#" class="btn btn-primary">30 dias</a>
-						         &nbsp; <a href="#" class="btn btn-primary">60 dias</a> &nbsp; <a href="#" class="btn btn-primary">90 dias</a>
-						        &nbsp; <a href="#" class="btn btn-primary">180 dias</a> &nbsp; <a href="#" class="btn btn-primary">365 dias</a>
+						        <a href="#" class="btn btn-primary">Hoje</a> &nbsp; 
+						        <a href="#" class="btn btn-primary">30 dias</a>&nbsp; 
+						         <a href="#" class="btn btn-primary">60 dias</a> &nbsp; 
+						         <a href="#" class="btn btn-primary">90 dias</a> &nbsp; 
+						        <a href="#" class="btn btn-primary">180 dias</a> &nbsp; 
+						        <a href="#" class="btn btn-primary">365 dias</a>
 						      </div>
 						    </div>
 						  </div>

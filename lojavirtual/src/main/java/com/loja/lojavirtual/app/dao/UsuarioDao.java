@@ -32,6 +32,10 @@ public class UsuarioDao {
 	public Usuario recuperarPorEmail(String email) {
 		return em.createQuery("select a from Usuario a where a.email = :email", Usuario.class).setParameter("email", email).getSingleResult();
 	}
+	
+	public Usuario recuperarPorCPF(String cpf) {
+		return em.createQuery("select a from Usuario a where a.cpf = :cpf", Usuario.class).setParameter("cpf", cpf).getSingleResult();
+	}
 
 	public void atualizar(Usuario usu) {
 		em.merge(usu);
