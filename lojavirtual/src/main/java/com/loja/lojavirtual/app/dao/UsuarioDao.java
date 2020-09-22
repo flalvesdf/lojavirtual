@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.loja.lojavirtual.app.domain.Produtos;
 import com.loja.lojavirtual.app.domain.Usuario;
 
 @Repository	
@@ -34,7 +36,14 @@ public class UsuarioDao {
 	}
 	
 	public Usuario recuperarPorCPF(String cpf) {
-		return em.createQuery("select a from Usuario a where a.cpf = :cpf", Usuario.class).setParameter("cpf", cpf).getSingleResult();
+		
+		Query query = em.createQuery("select a from Usuario a where a.cpf = "+ cpf);
+	    @SuppressWarnings("unchecked")
+	    Usuario resultList = (Usuario) query.getSingleResult();
+		return resultList;
+		
+		
+		//return em.createQuery("select a from Usuario a where a.cpf = :cpf", Usuario.class).setParameter("cpf", cpf).getSingleResult();
 	}
 
 	public void atualizar(Usuario usu) {
